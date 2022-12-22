@@ -9,14 +9,18 @@ const loginUser = (req, res) => {
         if(result[0]){
             if(result[0].password === password){
                 result[0].photo = `http://localhost:${process.env.PORT}/images/${result[0].photo}`
-                let user = {'id':result[0].id,'firstName':result[0].firstName, 'lastName':result[0].lastName, 'email':result[0].email, 'password':result[0].password, 'photo':result[0].photo, 'city':result[0].city}
+                let user = {'id':result[0].id,'firstName':result[0].firstName, 
+                            'lastName':result[0].lastName, 'email':result[0].email, 
+                            'mobile':result[0].mobile, 'password':result[0].password, 
+                            'photo':result[0].photo, 'city':result[0].city}
                 
                 const token = jwt.sign(
                     {id:result[0].id, role: result[0].role},
                     "restaurant",
                     {expiresIn:"24h"}
                 )
-                res.status(200).send({'email': true, 'password':true, role: result[0].role, token, 'user':user})
+                res.status(200).send({'email': true, 'password':true, 
+                                        role: result[0].role, token, user})
             }
             else {
                 res.status(200).send({'email': true, 'password':false})   

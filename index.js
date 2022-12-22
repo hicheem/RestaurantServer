@@ -20,6 +20,9 @@ app.use('/images', express.static('images'));
 
 app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/menu', require('./routes/menuRoutes'));
+app.use('/api/table', require('./routes/tableRoutes'));
+app.use('/api/order', require('./routes/orderRoutes'));
+app.use('/api/book', require('./routes/bookRoutes'));
 app.use(errorHandler)
 app.listen(process.env.PORT, ()=> {
     console.log(`Server Started on port : ${process.env.PORT}`);

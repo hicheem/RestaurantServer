@@ -3,7 +3,6 @@ const db = require('../config/db');
 
 
 const getMenus = (req, res, next) => {
-    console.log("me");
     db.execute(`select item.id as item_id, item.title as item_title, 
                 item.price, item.quantity, item.recipe, item.image, 
                 menu.id as menu_id, menu.title as menu_title from 
@@ -14,9 +13,9 @@ const getMenus = (req, res, next) => {
         (err, result) => {
             if(!err){
                 db.execute(`select id, title from menu`, 
-                    (err, result2) => {
+                    (err, result_menu) => {
                         if(!err) {
-                            res.status(200).send({'menus': result2, 'items': result})
+                            res.status(200).send({'menus': result_menu, 'items': result})
                         }
                         else{
                             console.log('menu query erreur')
