@@ -54,7 +54,7 @@ const updateMenu = (req, res, next) => {
     const data = req.body
     const role = req.payload.role
     if(role === 'admin'){
-        db.execute(`update menu set title=?, summary=?, content=? where id=${id}`, [data.title, data.summary, data.content],
+        db.execute(`update menu set title=?, summary=?, content=?, type=? where id=${id}`, [data.title, data.summary, data.content, data.type],
             (err, result) => {
                 if(err){
                     console.log(err)
