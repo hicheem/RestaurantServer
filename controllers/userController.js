@@ -86,10 +86,33 @@ const updateUser = (req, res) => {
     )
 }
 
+const deleteUser = (req, res) => {
+    
+    const id = req.query.id
+    const role = req.payload.role
+    if(role === 'admin'){
+        db.execute('delete from users where id = ?', [id],
+        (err, result) => {
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.status(204).send({message:`User with id=${id} deleted successfully`})
+            }
+        }
+    )
+    }
+    else{
+        res.status(401).send({message:"Unauthorized"})
+    }
+}
+
+
 module.exports = {
     loginUser,
     getUsers,
     addUser,
-    updateUser
+    updateUser,
+    deleteUser
 }
 

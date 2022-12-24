@@ -6,8 +6,8 @@ const addBook = (req, res, next) => {
     const {tableId, userId, firstName, lastName, mobile, email, datetime} = req.body
     console.log({userId, firstName, lastName, mobile, email, tableId, datetime});
     db.execute(`insert into booking 
-            (tableID, userId, status, firstName, lastName, mobile, email, datetime) 
-            values (? ,?, ?, ?, ?, ?, ?, ?)`, [tableId, userId, 1, firstName, lastName, mobile, email, datetime.split('.')[0]],
+            (tableID, userId, firstName, lastName, mobile, email, datetime) 
+            values (? ,?, ?, ?, ?, ?, ?)`, [tableId, userId, firstName, lastName, mobile, email, datetime.split('.')[0]],
         (err, result)=>{
             if(err){
                 console.log(err)
