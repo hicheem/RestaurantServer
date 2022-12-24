@@ -3,11 +3,11 @@ const db = require('../config/db');
 
 const addBook = (req, res, next) => {
 
-    const {userId, firstName, lastName, mobile, email, tableId} = req.body
-    console.log({userId, firstName, lastName, mobile, email, tableId});
+    const {tableId, userId, firstName, lastName, mobile, email, datetime} = req.body
+    console.log({userId, firstName, lastName, mobile, email, tableId, datetime});
     db.execute(`insert into booking 
-            (tableID, userId, status, firstName, lastName, mobile, email) 
-            values (? ,?, ?, ?, ?, ?, ?)`, [tableId, userId, 1, firstName, lastName, mobile, email],
+            (tableID, userId, status, firstName, lastName, mobile, email, datetime) 
+            values (? ,?, ?, ?, ?, ?, ?, ?)`, [tableId, userId, 1, firstName, lastName, mobile, email, datetime.split('.')[0]],
         (err, result)=>{
             if(err){
                 console.log(err)
@@ -22,7 +22,8 @@ const addBook = (req, res, next) => {
 
 const addBookItem = (req, res, next) => {
 
-    const {bookingId, item} = req.body
+    const item = req.body.item
+    const bookingId = req.query.id
     db.execute(`insert into booking_item (bookingId, itemId, price, quantity) values(?, ?, ?, ?)`,
         [bookingId, item.id, item.price * item.quantity, item.quantity ], 
         (err, result) => {
@@ -59,8 +60,30 @@ const getBooking = (req, res, next) => {
     )
 }
 
+getAllBooking = (req, res, next) => {
+
+    db.execute('select id, tableId, status, lastName, email, datetime from booking',
+        (err, result) => {
+            if(err) {
+                console.log(err);
+            }
+            else{
+                res.status(200).send({booking:result})
+            }
+        }
+    )
+}
+
+getBookingInfo = (req, res) => {
+
+    const bookId = req.query.bookId
+
+    
+}
+
 module.exports = {
     addBook,
     addBookItem,
-    getBooking
+    getBooking,
+    getAllBooking
 }

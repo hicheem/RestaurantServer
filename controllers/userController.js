@@ -33,8 +33,63 @@ const loginUser = (req, res) => {
     );
 }
 
+const getUsers = (req, res, next) => {
+
+    db.execute('select id, firstName, lastName, mobile, email, role from users',
+        (err, result) => {
+            if(err)
+                res.status(500).send({message:"une erreur a ete survenu"})
+            else
+                res.status(200).send({users: result})
+        }
+    )
+}
+
+const addUser = (req, res, next) => {
+    
+    const role = req.payload.role;
+    const user = req.body
+    console.log(role, user);
+    if(role === 'admin'){
+        db.execute(`insert into users (firstName,lastName, mobile, email, password, role)
+                    values (?, ?, ?, ?, ?, ?)`,
+            [user.firstName, user.lastName, user.mobile, user.email, user.password, user.role],
+            (err, result) => {
+                if(err)
+                {
+                    res.status(500).send({message:err})
+                }
+                else{
+                    res.status(201).send({message:'User added successfully'})
+                }
+            }
+        )
+    }
+    else{
+        res.status(401).send({message:"Vous etes pas autorise a ajouter des utilisateur"})
+    }
+}
+
+const updateUser = (req, res) => {
+    const id = req.query.id
+    const role = req.body.role;
+    console.log(id, role)
+    db.execute('update users set role=? where id = ?', [role, id],
+        (err, result) => {
+            if(err){
+                console.log(err)
+            }
+            else{
+                res.status(201).send({message:'User updated successfully'})
+            }
+        }
+    )
+}
 
 module.exports = {
-    loginUser
+    loginUser,
+    getUsers,
+    addUser,
+    updateUser
 }
 
