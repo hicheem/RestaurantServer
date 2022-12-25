@@ -115,8 +115,7 @@ const deleteMenu = (req, res) => {
 
 const getItemsAdmin = (req, res, next) => {
     
-    // const role = req.payload.role
-    const role ='admin'
+    const role = req.payload.role
     if(role === 'admin'){
 
         db.execute(`select item.id as id, item.title as item_title, item.cooking, 
@@ -141,11 +140,96 @@ const getItemsAdmin = (req, res, next) => {
     }
 }
 
+// const updateItem = (req, res) => {
+
+//     const role = req.payload.role
+//     const id = req.query.id
+//     const data = req.body
+//     if(role === 'admin'){
+//         db.execute(`
+//             begin transaction;    
+//             update item set title=?, cooking=?, price=?, quantity=?, recipe=? where id=?;
+//             update menu_item set menuId=? where itemId=?;
+//             commit;
+//             `,[data.item_title, data.cooking, data.price, data.quantity, data.recipe, id, data.menuId, id],
+//             (err, result) => {
+//                 if(err){
+//                     console.log(err);
+//                 }
+//                 else{
+//                     res.status(201).send({message:"item updated successfully"})
+//                     console.log("success");
+//                 }
+//             }
+//             )
+//     }
+//     else{
+//         res.status(401).send({message:"Unauthorized"})
+//     }
+// }
+
+const updateItem = (req, res) => {
+
+    const role = req.payload.role
+    const id = req.query.id
+    const data = req.body
+    if(role === 'admin'){
+        db.execute(`update item set title=?, cooking=?, price=?, quantity=?, recipe=? where id=?`,
+            [data.item_title, data.cooking, data.price, data.quantity, data.recipe, id],
+            (err, result) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    db.execute('update menu_item set menuId=? where itemId=?', [data.menuId, id],
+                        (err, result) => {
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                                res.status(201).send({message:"item updated successfully"})
+                            }
+                        }
+                    )
+                    
+                }
+            }
+            )
+    }
+    else{
+        res.status(401).send({message:"Unauthorized"})
+    }
+}
+
+const deleteItem = (req, res) => {
+
+    const id = req.query.id
+    const role = req.payload.role
+    if(role === 'admin'){
+        db.execute('delete from item where id=?',[id],
+            (err, result) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.status(204).send({message:"Item deleted successfully"})
+                }
+            }
+        )
+    }
+    else{
+        res.status(401).send({message:"Unauthorized"})
+    }
+    
+}
+
 module.exports = {
     getMenusWithItem,
     getMenus,
     updateMenu,
     addMenu,
     deleteMenu,
-    getItemsAdmin
+    getItemsAdmin,
+    updateItem,
+    deleteItem
 }

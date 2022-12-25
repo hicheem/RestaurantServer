@@ -8,7 +8,7 @@ const loginUser = (req, res) => {
     (err, result)=>{
         if(result[0]){
             if(result[0].password === password){
-                result[0].photo = `http://localhost:${process.env.PORT}/images/${result[0].photo}`
+                // result[0].photo = `http://localhost:${process.env.PORT}/images/${result[0].photo}`
                 let user = {'id':result[0].id,'firstName':result[0].firstName, 
                             'lastName':result[0].lastName, 'email':result[0].email, 
                             'mobile':result[0].mobile, 'password':result[0].password, 

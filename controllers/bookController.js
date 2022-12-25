@@ -62,7 +62,10 @@ const getBooking = (req, res, next) => {
 
 getAllBooking = (req, res, next) => {
 
-    db.execute('select id, tableId, status, lastName, email, datetime from booking',
+    db.execute(`select booking.id, booking.tableId, table_top.code as tableCode, booking.userId, booking.status, booking.firstName, booking.lastName, booking.mobile, booking.email, booking.datetime, users.photo
+                from (
+                    (booking inner join table_top on booking.tableId=table_top.id)
+                    inner join users on booking.userId=users.id)`,
         (err, result) => {
             if(err) {
                 console.log(err);
@@ -74,16 +77,60 @@ getAllBooking = (req, res, next) => {
     )
 }
 
-getBookingInfo = (req, res) => {
+getBookingDetails = (req, res) => {
 
-    const bookId = req.query.bookId
-
+    const bookingId = req.query.bookingId
+    // const role = req.payload.role
+    const role ='admin'
+    if(role === 'admin'){
+        db.execute(`select bi.id , bi.quantity as bookingItemQuantity, bi.price ,
+                bi.status, i.id as itemId, i.title as itemTitle, i.cooking, 
+                i.quantity as itemQuantity, i.image 
+                from booking_item bi inner join item i on bi.itemId=i.id
+                where bi.bookingId = ? `, [bookingId],
+            (err, result) =>{
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.status(200).send({bookingDetails:result})
+                }
+            }
+        )
+    }
+    else{
+        res.status(401).send({message:"Unauthorized"})
+    }
     
+}
+
+const updateBookStatus = (req, res) => {
+
+    const id = req.query.id
+    const status = req.body.status
+    const role = req.payload.role
+    if(role === 'admin'){
+        db.execute('update booking set status=? where id=?',[status, id],
+            (err, result) => {
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.status(201).send({message:"Booking Updated successfully"})
+                }
+            }
+        )
+    }
+    else{
+        res.status(401).send({message:"Unauthorized"})
+    }
 }
 
 module.exports = {
     addBook,
     addBookItem,
     getBooking,
-    getAllBooking
+    getAllBooking,
+    getBookingDetails,
+    updateBookStatus
 }
