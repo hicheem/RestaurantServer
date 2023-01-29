@@ -34,17 +34,17 @@ CREATE TABLE IF NOT EXISTS `table_top` (
 
 -- Listage des données de la table restaurant.table_top : ~9 rows (environ)
 INSERT INTO `table_top` (`id`, `code`, `status`, `capacity`, `content`) VALUES
-	(0, '0', 0, 0, NULL),
-	(1, '1', 0, 4, NULL),
-	(2, '2', 1, 3, NULL),
-	(3, '3', 1, 2, NULL),
-	(4, '4', 0, 4, NULL),
-	(5, '5', 0, 4, NULL),
-	(6, '6', 0, 2, NULL),
-	(7, '7', 0, 4, NULL),
-	(8, '008', 1, 1, NULL),
-	(9, '9', 0, 1, NULL),
-	(10, '10', 0, 1, NULL);
+	(1, '0', 0, 0, NULL),
+	(2, '1', 0, 4, NULL),
+	(3, '2', 1, 3, NULL),
+	(4, '3', 1, 2, NULL),
+	(5, '4', 0, 4, NULL),
+	(6, '5', 0, 4, NULL),
+	(7, '6', 0, 2, NULL),
+	(8, '7', 0, 4, NULL),
+	(9, '008', 1, 1, NULL),
+	(10, '9', 0, 1, NULL),
+	(11, '10', 0, 1, NULL);
 
 -- Listage de la structure de table restaurant. menu
 CREATE TABLE IF NOT EXISTS `menu` (
