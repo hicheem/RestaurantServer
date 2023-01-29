@@ -4,7 +4,6 @@ const db = require('../config/db');
 const addBook = (req, res, next) => {
 
     const {tableId, userId, firstName, lastName, mobile, email, datetime} = req.body
-    console.log({userId, firstName, lastName, mobile, email, tableId, datetime});
     db.execute(`insert into booking 
             (tableID, userId, firstName, lastName, mobile, email, datetime) 
             values (? ,?, ?, ?, ?, ?, ?)`, [tableId, userId, firstName, lastName, mobile, email, datetime.split('.')[0]],
@@ -13,7 +12,6 @@ const addBook = (req, res, next) => {
                 console.log(err)
             }
             else{
-                console.log(result.insertId)
                 res.status(201).send({"message":"Book added successfully", bookingId:result.insertId})
             }
         }
@@ -25,7 +23,7 @@ const addBookItem = (req, res, next) => {
     const item = req.body.item
     const bookingId = req.query.id
     db.execute(`insert into booking_item (bookingId, itemId, price, quantity) values(?, ?, ?, ?)`,
-        [bookingId, item.id, item.price * item.quantity, item.quantity ], 
+        [bookingId, item.id, item.price, item.quantity ], 
         (err, result) => {
             if(err)
                 console.log(err)
@@ -52,7 +50,7 @@ const getBooking = (req, res, next) => {
                 res.status(500).send({message:"server error"})
             else {
                 result.map((item, index) => (
-                    item.status === 1 ? result[index].status = 'Reserved' : result[index].status = 'Accepted'
+                    item.status === 0 ? result[index].status = 'Pending' : result[index].status = 'Accepted'
                 ))
                 res.status(200).send({booking: result})
             }

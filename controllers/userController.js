@@ -35,7 +35,7 @@ const loginUser = (req, res) => {
 
 const getUsers = (req, res, next) => {
 
-    db.execute('select id, firstName, lastName, mobile, email, role from users',
+    db.execute('select id, photo, firstName, lastName, mobile, email, role from users',
         (err, result) => {
             if(err)
                 res.status(500).send({message:"une erreur a ete survenu"})
@@ -49,7 +49,6 @@ const addUser = (req, res, next) => {
     
     const role = req.payload.role;
     const user = req.body
-    console.log(role, user);
     if(role === 'admin'){
         db.execute(`insert into users (firstName,lastName, mobile, email, password, role)
                     values (?, ?, ?, ?, ?, ?)`,
@@ -73,7 +72,6 @@ const addUser = (req, res, next) => {
 const updateUser = (req, res) => {
     const id = req.query.id
     const role = req.body.role;
-    console.log(id, role)
     db.execute('update users set role=? where id = ?', [role, id],
         (err, result) => {
             if(err){

@@ -6,7 +6,6 @@ const bookTable = (req, res, next) => {
 
 
     const capacity = req.query.capacity
-    console.log(capacity)
     db.execute('select * from table_top where status = 0 and capacity=?',[capacity], 
     (err, result) => {
         console.log(result)
@@ -24,7 +23,6 @@ const modifyStatusTable = (req, res, next) => {
     
     const tableId = req.body.tableId;
     const status = req.body.status;
-    console.log(tableId, status);
     db.execute('update table_top set status=? where id=?', [status, tableId], 
     (err, result) => {
         if(err){
