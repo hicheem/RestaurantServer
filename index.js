@@ -24,7 +24,7 @@ app.use('/api/table', require('./routes/tableRoutes'));
 app.use('/api/book', require('./routes/bookRoutes'));
 app.use('/api/order', require('./routes/orderRoutes'));
 app.use(errorHandler)
-app.listen(process.env.PORT, ()=> {
+app.listen(process.env.PORT, '0.0.0.0', ()=> {
     console.log(`Server Started on port : ${process.env.PORT}`);
 })
 
